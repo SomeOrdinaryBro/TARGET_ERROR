@@ -8,5 +8,10 @@ TARGET_ERROR is an exciting side-scrolling 2D game where players take on the rol
 - Diverse levels: Explore a variety of meticulously designed levels, each presenting unique challenges and obstacles to overcome.
 - Work in progress: Please note that TARGET_ERROR is still under development, with new features and content regularly being added.
 
+<br>
+  <img src="https://github.com/SomeOrdinaryBro/TARGET_ERROR/assets/95146062/a343facd-ec31-49a6-958c-fcdbd259ba1f" width="400" height="200">
+  <p style="font-size: 5px;">Assets used are for development purpose only, will be updated once the game is complete</p>
+<br>
+
 ## Feedback
-We value your feedback! If you encounter any bugs, have suggestions for new features, or just want to share your thoughts on TARGET_ERROR, please don't hesitate to reach out to us.
+We value your feedback! If you encounter any bugs, have suggestions for new features, or just want to share your thoughts on TARGET_ERROR, please don't hesitate to reach out to me.
