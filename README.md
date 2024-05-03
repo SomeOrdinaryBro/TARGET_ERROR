@@ -1,4 +1,4 @@
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Honk&size=70&duration=4000&pause=10000&center=true&vCenter=true&random=false&width=800&height=100&lines=TARGET_ERROR)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Freeman&size=70&duration=4000&pause=10000&color=F7F7F7&background=08000000&center=true&vCenter=true&random=false&width=800&height=100&lines=%23%23+TARGET_ERROR)](https://git.io/typing-svg)
 
 ## Description
 TARGET_ERROR is an exciting side-scrolling 2D game where players take on the role of a skilled agent navigating through various obstacles and enemies to reach their target. With fast-paced action and challenging levels, players will need to utilize precise timing and quick reflexes to overcome each obstacle in their path.
