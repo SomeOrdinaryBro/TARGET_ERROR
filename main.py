@@ -12,6 +12,9 @@ pygame.display.set_caption('Target #Error')
 clock = pygame.time.Clock()
 FPS = 60
 
+#Game Var
+GRAVITY = 0.80
+
 #player action
 moving_left = False
 moving_right = False
@@ -19,15 +22,23 @@ moving_right = False
 #COLORS
 BG = (255, 255, 255)
 
+RED = (255, 0, 0)
+GREEN = (0, 255, 0)
+BLUE = (0, 0, 255)
+
 def draw_bg():
     screen.fill(BG)
+    pygame.draw.line(screen,RED, (0, 300), (SCREEN_WIDTH, 300))
 
 class Soldier(pygame.sprite.Sprite):
     def __init__(self, char_type, x, y, scale, speed, ):
         pygame.sprite.Sprite.__init__(self)
+        self.alive = True
         self.char_type = char_type
         self.speed = speed        
         self.direction = 1
+        self.vel_y = 0
+        self.jump = False
         self.flip = False
         
         self.animation_list = []
@@ -67,7 +78,19 @@ class Soldier(pygame.sprite.Sprite):
             dx = self.speed
             self.flip = False
             self.direction = 1
-            
+        #Jump    
+        if self.jump == True:
+            self.vel_y = -11
+            self.jump = False
+        #Gravity
+        self.vel_y += GRAVITY
+        if self.vel_y > 10:
+            self.vel_y
+        dy += self.vel_y
+        #collision
+        if self.rect.bottom + dy > 300:
+            dy = 300 - self.rect.bottom
+        
         #update position
         self.rect.x += dx
         self.rect.y += dy
@@ -116,13 +139,14 @@ while run:
     
     
     #update player actions
-    if moving_left or moving_right:
-        player.update_action(1) #1: run
-    else:
-        player.update_action(0) #0: idle
-    
-    player.move(moving_left, moving_right)
-    
+    if player.alive:
+        if moving_left or moving_right:
+            player.update_action(1) #1: run
+        else:
+            player.update_action(0) #0: idle
+        
+        player.move(moving_left, moving_right)
+        
     for event in pygame.event.get():
         #button presses
         if event.type == pygame.KEYDOWN:
@@ -130,6 +154,8 @@ while run:
                 moving_left = True
             if event.key == pygame.K_d:
                 moving_right = True
+            if event.key == pygame.K_w and player.alive:
+                player.jump = True
             if event.key == pygame.K_ESCAPE:
                 run = False
                 
