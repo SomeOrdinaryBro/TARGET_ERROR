@@ -166,7 +166,7 @@ class Bullet(pygame.sprite.Sprite):
 #Sprite group
 bullet_group = pygame.sprite.Group()
 
-player = Soldier('player_character', 200, 200, 3, 5, 20)
+player = Soldier('player_character', 50, 50, 3, 5, 20)
 enemy = Soldier('enemy_character', 400, 200, 3, 5, 20)
 
 
