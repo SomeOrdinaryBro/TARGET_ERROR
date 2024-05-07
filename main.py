@@ -23,6 +23,17 @@ shoot = False
 
 #load images
 bullet_img = pygame.image.load('./assets/icons/bullet.png').convert_alpha()
+grenade_img = pygame.image.load('./assets/icons/grenade.png').convert_alpha()
+mountain_img = pygame.image.load('./assets/background/mountain.png').convert_alpha()
+pine1_img = pygame.image.load('./assets/background/pine1.png').convert_alpha()
+pine2_img = pygame.image.load('./assets/background/pine2.png').convert_alpha()
+clouds_img = pygame.image.load('./assets/background/sky_cloud.png').convert_alpha()
+
+# # Resize background images to fit the screen
+# mountain_img = pygame.transform.scale(mountain_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+# pine1_img = pygame.transform.scale(pine1_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+# pine2_img = pygame.transform.scale(pine2_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
+# clouds_img = pygame.transform.scale(clouds_img, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #COLORS
 BG = (255, 255, 255)
@@ -57,7 +68,7 @@ class Soldier(pygame.sprite.Sprite):
         self.action = 0
         self.update_time = pygame.time.get_ticks()
         
-        animation_types = ['Idle' , 'Run', 'Jump']
+        animation_types = ['Idle' , 'Run', 'Jump', 'Death']
         for animation in animation_types:
             
             temp_list = []
@@ -75,6 +86,7 @@ class Soldier(pygame.sprite.Sprite):
     
     def update(self):
         self.update_animation()
+        self.check_alive()
         if self.shoot_cooldown > 0:
             self.shoot_cooldown -= 1
     
@@ -127,7 +139,11 @@ class Soldier(pygame.sprite.Sprite):
             self.update_time = pygame.time.get_ticks()
             self.frame_index += 1
         if self.frame_index >= len(self.animation_list[self.action]):
-            self.frame_index = 0
+            if self.action == 3:
+                self.frame_index = len(self.animation_list[self.action]) - 1
+            
+            else:
+                self.frame_index = 0
             
             
     def update_action(self, new_action):
@@ -136,7 +152,14 @@ class Soldier(pygame.sprite.Sprite):
             #update anim setting
             self.frame_index = 0
             self.update_time = pygame.time.get_ticks()
-        
+    
+    def check_alive(self):
+        if self.health <= 0:
+            self.health = 0
+            self.speed = 0
+            self.alive = False
+            self.update_action(3)
+    
     def draw(self):
         screen.blit(pygame.transform.flip(self.image, self.flip, False), self.rect)
 
@@ -146,7 +169,7 @@ class Bullet(pygame.sprite.Sprite):
         self.speed = 10
         self.image = bullet_img
         self.rect = self.image.get_rect()
-        self.rect.center = (x, y)
+        self.rect.center = (x, y + 11)
         self.direction = direction
     
     def update(self):
@@ -154,20 +177,32 @@ class Bullet(pygame.sprite.Sprite):
         #memory update
         if self.rect.right < 0 or self.rect.left > SCREEN_WIDTH:
             self.kill()
-            
+        #collision 
         if pygame.sprite.spritecollide(player, bullet_group, False):
             if player.alive:
-                self.kill()
-                
+                player.health -= 5
+                self.kill()     
         if pygame.sprite.spritecollide(enemy, bullet_group, False):
             if enemy.alive:
+                enemy.health -= 20
                 self.kill()
+      
+class Grenade(pygame.sprite.Sprite):
+    def __init__(self, x, y, direction):
+        pygame.sprite.Sprite.__init__(self)
+        self.timer = 100
+        self.vel_y = -11
+        self.speed = 8
+        self.image = grenade_img
+        self.rect = self.image.get_rect()
+        self.rect.center = (x, y + 11)
+        self.direction = direction
         
 #Sprite group
 bullet_group = pygame.sprite.Group()
 
-player = Soldier('player_character', 50, 50, 3, 5, 20)
-enemy = Soldier('enemy_character', 400, 200, 3, 5, 20)
+player = Soldier('player_character', 400, 200, 2, 5, 20)
+enemy = Soldier('enemy_character', 400, 200, 2, 5, 20)
 
 
 x = 200
@@ -180,10 +215,17 @@ while run:
     
     clock.tick(FPS)
     
-    draw_bg()
+    #draw_bg()
+    
+    screen.blit(clouds_img, (0, 0))  # Draw clouds first
+    screen.blit(mountain_img, (0, 0))  # Draw mountains behind pines
+    screen.blit(pine1_img, (0, 0))  # Draw first pine layer
+    screen.blit(pine2_img, (0, 0))  # Draw second pine layer
     
     player.update()
     player.draw()
+    
+    enemy.update()
     enemy.draw()
 
     #update/draw groups
